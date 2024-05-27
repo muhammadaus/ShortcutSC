@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<script type="module" src="app.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethereum Smart Contract Interaction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        input, textarea, select, button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #contractInteraction {
+            margin-top: 20px;
+        }
+        #result {
+            margin-top: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interact with Ethereum Smart Contract</h1>
+    <label for="networkSelector">Select Network:</label>
+    <select id="networkSelector">
+        <option value="mainnet">Mainnet</option>
+        <option value="ropsten">Ropsten</option>
+        <option value="rinkeby">Rinkeby</option>
+        <option value="kovan">Kovan</option>
+        <option value="goerli">Goerli</option>
+        <option value="sepolia">Sepolia</option>
+        <option value="arbitrum">Arbitrum Mainnet</option>
+        <option value="arbitrum_sepolia">Arbitrum Sepolia Testnet</option>
+    </select>
+    <input type="text" id="contractAddress" placeholder="Enter Smart Contract Address">
+    <textarea id="contractABI" placeholder="Enter Contract ABI (JSON format)"></textarea>
+    <button id="connectButton">Connect</button>
+    <div id="contractInteraction" style="display:none;">
+        <button id="callFunction">Call Function</button>
+        <div id="result"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
