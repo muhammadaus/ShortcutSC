@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useRef } from 'react';
 import { ethers } from 'ethers';
-import Web3 from 'web3';
 
 function App() {
   const [account, setAccount] = useState(null);
-  const [web3, setWeb3] = useState(null);
+  const [provider, setProvider] = useState(null);
+  const [signer, setSigner] = useState(null);
+  const [contract, setContract] = useState(null);
   const [abi, setAbi] = useState(null);
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState(['', '', '']);
   const [network, setNetwork] = useState('');
+
+  const inputValuesRef = useRef({});
 
   const handleNetworkChange = async (event) => {
     const network = event.target.value;
@@ -73,14 +77,22 @@ function App() {
   };
 
 
-  const handleInputChange = (name, value) => {
-    setValues(prevValues => ({ ...prevValues, [name]: value }));
+  const handleInputChange = (index) => (event) => {
+    const newValues = [...values];
+    newValues[index] = event.target.value;
+    setValues(newValues);
   };
+
+  useEffect(() => {
+    console.log(values);
+  }, [values]);
 
   const handleConnect = async () => {
     const abiJson = document.getElementById('contractABI').value;
-  const abi = JSON.parse(abiJson);
-  setAbi(abi);
+    const abi = JSON.parse(abiJson);
+    setAbi(abi);
+
+    const contractAddress = document.getElementById('contractAddress').value;
 
     if (window.ethereum) {
       try {
@@ -89,6 +101,10 @@ function App() {
         const account = ethers.utils.getAddress(accounts[0]);
         setAccount(account);
         console.log(`Connected with address: ${account}`);
+
+        // Initialize the contract
+        const contract = new ethers.Contract(contractAddress, abi, signer);
+        setContract(contract);
       } catch (error) {
         console.error("User denied account access");
       }
@@ -97,33 +113,60 @@ function App() {
     }
   };
 
-  const handleSign = async () => {
-    if (window.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+
+  const handleSign = async (methodName, params) => {
+    console.log(`methodName: ${methodName}, params:`, params);
+    if (!window.ethereum) {
+      return;
+    }
   
-      // Replace 'contract-address' with the address of your contract
-      const contract = new ethers.Contract('contract-address', abi, signer);
+    try {
+      // Find the function object from the contract using the function name
+      const functionObject = contract.interface.getFunction(methodName);
+      console.log('Contract ABI:', contract.interface.fragments);
+console.log('Function object:', functionObject);
+      if (!functionObject) {
+        throw new Error(`Function ${methodName} not found on contract`);
+      }
   
-      // Replace 'methodName' with the name of the method you want to call
-      const method = contract.methods.methodName(...Object.values(values));
+      // Prepare the transaction
+const transaction = {
+  to: contract.address,
+  from: account,
+  data: contract.interface.encodeFunctionData(methodName, params)
+};
   
-      // Estimate the gas required to execute the method
-      const gas = await method.estimateGas({ from: signer.getAddress() });
+      // Estimate the gas for the transaction
+      const gasEstimate = await window.ethereum.request({
+        method: 'eth_estimateGas',
+        params: [transaction]
+      });
   
-      // Sign and send the transaction
-      const tx = await method.send({ gasLimit: gas });
-      const receipt = await tx.wait();
+      // Prepare the transaction for eth_sendTransaction
+      const sendTransaction = {
+        ...transaction,
+        gas: gasEstimate
+      };
   
-      console.log('Transaction receipt:', receipt);
+      // Send the transaction with the estimated gas
+      const result = await window.ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [sendTransaction]
+      });
+  
+      console.log(result);
+    } catch (error) {
+      console.error(`Failed to sign ${methodName}:`, error);
     }
   };
 
   useEffect(() => {
     async function loadWeb3() {
       if (window.ethereum) {
-        const web3 = new Web3(window.ethereum);
-        setWeb3(web3);
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        setProvider(provider);
+        const signer = provider.getSigner();
+        setSigner(signer);
         try {
           const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
           const account = ethers.utils.getAddress(accounts[0]);
@@ -132,9 +175,6 @@ function App() {
         } catch (error) {
           console.error("User denied account access");
         }
-      } else if (window.web3) {
-        const web3 = new Web3(window.web3.currentProvider);
-        setWeb3(web3);
       } else {
         console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
       }
@@ -165,9 +205,22 @@ function App() {
       <div key={index}>
         <label>{item.name}</label>
         {item.inputs.map((input, inputIndex) => (
-          <input key={inputIndex} type="text" placeholder={`Enter value for ${input.name}`} onChange={e => handleInputChange(input.name, e.target.value)} />
+          <div key={inputIndex}>
+            <input 
+              type="text" 
+              placeholder={`Enter value ${inputIndex + 1} for ${input.name}`} 
+              onChange={e => {
+                console.log(`Input value for ${input.name}:`, e.target.value);
+                inputValuesRef.current[input.name] = e.target.value; // Store the input value in the ref
+                handleInputChange(input.name, inputIndex, e.target.value);
+              }} 
+            />
+          </div>
         ))}
-        <button onClick={() => handleSign(item.name)}>Sign {item.name}</button>
+        <button onClick={() => {
+  console.log(`values:`, values);
+  handleSign(item.name, Object.values(inputValuesRef.current)); // Pass the values of the ref to handleSign
+}}>Sign {item.name}</button>
       </div>
     );
   } else {
