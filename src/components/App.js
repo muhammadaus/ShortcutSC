@@ -8,7 +8,7 @@ function App() {
   const [signer, setSigner] = useState(null);
   const [contract, setContract] = useState(null);
   const [abi, setAbi] = useState(null);
-  const [values, setValues] = useState(['', '', '']);
+  const [values, setValues] = useState(['', '', '', '', '', '', '', '', '']);
   const [network, setNetwork] = useState('');
 
   const inputValuesRef = useRef({});
@@ -129,11 +129,14 @@ console.log('Function object:', functionObject);
         throw new Error(`Function ${methodName} not found on contract`);
       }
   
+      // Filter out empty strings from params
+      const filteredParams = params.filter(param => param !== '');
+  
       // Prepare the transaction
 const transaction = {
   to: contract.address,
   from: account,
-  data: contract.interface.encodeFunctionData(methodName, params)
+  data: contract.interface.encodeFunctionData(methodName, filteredParams)
 };
   
       // Estimate the gas for the transaction
