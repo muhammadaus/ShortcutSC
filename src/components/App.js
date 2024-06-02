@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRef } from 'react';
 import { ethers } from 'ethers';
+import Navigation from './Navigation';
 
 function App() {
   const [account, setAccount] = useState(null);
@@ -189,7 +190,8 @@ const transaction = {
   // rest of your code
 
   return (
-    <div>
+    <div className="App">
+      <Navigation />
       <h1>Interact with Ethereum Smart Contract</h1>
     <label htmlFor="networkSelector">Select Network:</label>
     <select id="networkSelector" value={network} onChange={handleNetworkChange}>
