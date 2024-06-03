@@ -39,3 +39,27 @@
   .tabcontent.active {
     display: block;
   }
+
+  .tab {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f1f1f1; /* Change this to the desired background color */
+  }
+  
+  .tab button {
+    display: inline-block;
+    background-color: inherit;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+  }
+  
+  .tab button:hover {
+    background-color: #ddd; /* Change this to the desired hover color */
+  }
+

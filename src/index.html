@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<script type="module" src="app.js"></script>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -52,7 +51,7 @@
     </div>
 
     <!-- Contract Tab -->
-    <div id="Contract" class="tabcontent">
+    <div id="Interact Smart Contract" class="tabcontent">
         <!-- ... existing HTML for contract interaction ... -->
     </div>
 
@@ -66,7 +65,7 @@
     <script src="app.js"></script>
 
     <script>
-        function openTab(evt, tabName) {
+        async function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
@@ -78,8 +77,13 @@
             }
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
+    
+            // If the Interact Smart Contract tab is clicked, import app.js
+            if (tabName === 'Interact Smart Contract') {
+                await import('./app.js');
+            }
         }
-
+    
         // Get the element with id="defaultOpen" and click on it
         document.getElementById("defaultOpen").click();
     </script>
