@@ -43,6 +43,7 @@ function App() {
   }
 
   useEffect(() => {
+    document.title = "Interact Smart Contract";
     const checkAccounts = async () => {
       if (window.ethereum) {
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
@@ -129,8 +130,22 @@ function App() {
     setValues(newValues);
   };
 
-
   const handleConnect = async () => {
+    if (window.ethereum) {
+        try {
+            // Request account access
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const account = getAddress(accounts[0]);
+            setAccount(account);
+        } catch (error) {
+            console.error(`Failed to connect: ${error}`);
+        }
+    } else {
+        console.error('Ethereum object is not available on window.');
+    }
+};
+
+  const handleReadWrite = async () => {
     if (!address) {
       setIsAddressEmpty(true);
       return;
@@ -153,7 +168,6 @@ function App() {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const account = getAddress(accounts[0]);
         setAccount(account);
-        console.log(`Connected with address: ${account}`);
   
         // Initialize the contract
         const contract = getContract({
@@ -252,7 +266,6 @@ function App() {
           const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' }) 
           const account = getAddress(accounts[0]);
           setAccount(account);
-          console.log(`Connected with address: ${account}`);
         } catch (error) {
           console.error("User denied account access");
         }
@@ -268,6 +281,13 @@ function App() {
   return (
     <div className="App">
   <Navigation />
+  <button onClick={handleConnect} style={{
+    backgroundColor: '#000000',
+    color: 'white',
+    padding: '5px 10px',
+    borderRadius: '4px'
+}}
+disabled={!!account}>{account ? `${account.slice(0, 5)}...${account.slice(-5)}` : 'Connect Wallet'}</button>
   <h1>Interact with EVM Smart Contract
   <p style={{ color: 'red' }}>{message}</p></h1>
 <label htmlFor="networkSelector">Select Network:</label>
@@ -276,6 +296,7 @@ function App() {
   defaultValue={options.find(option => option.value === 'mainnet')}
   options={options}
   onChange={selectedOption => handleNetworkChange(selectedOption.value)}
+  styles={{ control: (base) => ({ ...base, width: 300 }) }}
 />
 <input 
   type="text" 
@@ -294,11 +315,18 @@ function App() {
       <div>
         {/* ... */}
         <textarea 
-            style={{ width: '500px' }}
-            id="contractABI" placeholder="Enter Contract ABI (JSON format)" 
-      onChange={handleAbiChange}
-            />
-        <button id="connectButton" onClick={handleConnect} disabled={isAddressEmpty || isAddressTooShort || isAbiInvalid}>Connect</button>
+    style={{ 
+        width: '500px', 
+        height: '300px', 
+        overflow: 'auto'
+    }}
+    id="contractABI" 
+    placeholder="Enter Contract ABI (JSON format)" 
+    onChange={handleAbiChange}
+/>
+        <button id="connectButton" onClick={handleReadWrite} style={{
+    borderRadius: '4px'
+}} disabled={isAddressEmpty || isAddressTooShort || isAbiInvalid}>Read Contract</button>
         {!isAddressEmpty && isAddressTooShort && <p style={{ color: 'red' }}>Address is too short!</p>}
         {isAddressEmpty && <p style={{ color: 'red' }}>Address is required!</p>}
         {isAbiInvalid && <p style={{ color: 'red' }}>Valid ABI is required!</p>}

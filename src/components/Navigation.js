@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 
+import { createPublicClient, createWalletClient, http, custom } from 'viem'
+import { getAddress } from 'viem'
+import { Button } from 'react-bootstrap';
+
 const Navigation = ({ account }) => {
   const [activeTab, setActiveTab] = useState('Contract');
 
@@ -38,6 +42,7 @@ const Navigation = ({ account }) => {
         <Navbar.Text style={{ color: 'black' }}>
           {account && account.slice(0, 5) + '...' + account.slice(38, 42)}
         </Navbar.Text>
+        
       </Navbar.Collapse>
 
       {activeTab === 'Notes' && (
