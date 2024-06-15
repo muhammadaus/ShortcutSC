@@ -132,18 +132,30 @@ function App() {
 
   const handleConnect = async () => {
     if (window.ethereum) {
-        try {
-            // Request account access
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      try {
+        // Request account access
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const account = getAddress(accounts[0]);
+        setAccount(account);
+  
+        // Listen for accountsChanged event to handle wallet disconnection
+        window.ethereum.on('accountsChanged', (accounts) => {
+          if (accounts.length === 0) {
+            // Wallet is disconnected
+            setAccount(null); // or setAccount('');
+          } else {
+            // Wallet is connected
             const account = getAddress(accounts[0]);
             setAccount(account);
-        } catch (error) {
-            console.error(`Failed to connect: ${error}`);
-        }
+          }
+        });
+      } catch (error) {
+        console.error(`Failed to connect: ${error}`);
+      }
     } else {
-        console.error('Ethereum object is not available on window.');
+      console.error('Ethereum object is not available on window.');
     }
-};
+  };
 
   const handleReadWrite = async () => {
     if (!address) {
