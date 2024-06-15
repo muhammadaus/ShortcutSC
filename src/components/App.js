@@ -140,6 +140,7 @@ function App() {
   
         // Listen for accountsChanged event to handle wallet disconnection
         window.ethereum.on('accountsChanged', (accounts) => {
+          console.log(`Accounts changed: ${accounts}`);
           if (accounts.length === 0) {
             // Wallet is disconnected
             setAccount(null); // or setAccount('');
@@ -287,7 +288,7 @@ function App() {
     }
 
     loadWeb3();
-  }, []);
+  }, [account]);
 
 
   return (
