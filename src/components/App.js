@@ -8,6 +8,7 @@ import { getAbiItem } from 'viem'
 import { getContract } from 'viem'
 import { createPublicClient, createWalletClient, http, custom } from 'viem'
 import { getAddress } from 'viem'
+import { parseEther } from 'viem'
 
 
 const viemChains = require('viem/chains');
@@ -239,9 +240,14 @@ function App() {
       if (!functionObject) {
         throw new Error(`Function ${methodName} not found on contract`);
       }
-  
+
+      let value;
+      if (inputValuesRef.current['value']) {
+        value = parseEther(inputValuesRef.current['value']);
+      }
+      
       // Filter out empty strings from params
-      const filteredParams = params.filter(param => param !== '');
+      const filteredParams = params.filter(param => param !== inputValuesRef.current['value']);
   
       // Prepare the transaction
       const { request } = await publicClient.simulateContract({
@@ -258,7 +264,8 @@ function App() {
       // Prepare the transaction for eth_sendTransaction
       const sendTransaction = {
         ...request,
-        gas: gasEstimate
+        gas: gasEstimate,
+        value: value
       };
   
       // Send the transaction with the estimated gas
@@ -350,42 +357,46 @@ disabled={!!account}>{account ? `${account.slice(0, 5)}...${account.slice(-5)}` 
     </div>
   ))}
 </div>
-        {abi && abi.map((item, index) => {
-          if (!item.name) {
+{abi && abi.map((item, index) => {
+  if (!item.name) {
     return null; 
   }
   if (item.stateMutability == 'view') {
     return null; 
   }
-  if (item.inputs && item.inputs.length > 0) {
-    return (
-      <div key={index}>
-        <label>{item.name}</label>
-        {item.inputs.map((input, inputIndex) => (
-          <div key={inputIndex}>
-            <input 
+  return (
+    <div key={index}>
+      <label>{item.name}</label>
+      {item.inputs && item.inputs.length > 0 && item.inputs.map((input, inputIndex) => (
+        <div key={inputIndex}>
+          <input 
             style={{ width: '400px' }}
-              type="text" 
-              placeholder={`Enter value ${inputIndex + 1} for ${input.name}`} 
-              onChange={e => {
-                inputValuesRef.current[input.name] = e.target.value; // Store the input value in the ref
-                handleInputChange(input.name, inputIndex, e.target.value);
-              }} 
-            />
-          </div>
-        ))}
-        <button onClick={() => {
-  handleSign(item.name, Object.values(inputValuesRef.current)); // Pass the values of the ref to handleSign
-}}>Sign {item.name}</button>
-      </div>
-    );
-  } else {
-    return (
-      <div key={index}>
-        <button onClick={() => handleSign(item.name)}>Sign {item.name}</button>
-      </div>
-    );
-  }
+            type="text" 
+            placeholder={`Enter value ${inputIndex + 1} for ${input.name}`} 
+            onChange={e => {
+              inputValuesRef.current[input.name] = e.target.value; // Store the input value in the ref
+              handleInputChange(input.name, inputIndex, e.target.value);
+            }} 
+          />
+        </div>
+      ))}
+      {item.stateMutability === 'payable' && (
+        <div>
+          <input 
+            style={{ width: '400px' }}
+            type="text" 
+            placeholder="Enter Ether amount" 
+            onChange={e => {
+              inputValuesRef.current['value'] = e.target.value; // Store the Ether amount in the ref
+            }} 
+          />
+        </div>
+      )}
+      <button onClick={() => {
+        handleSign(item.name, Object.values(inputValuesRef.current)); // Pass the values of the ref to handleSign
+      }}>Sign {item.name}</button>
+    </div>
+  );
 })}
         {/* ... */}
       </div>

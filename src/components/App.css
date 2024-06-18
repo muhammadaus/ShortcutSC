@@ -63,3 +63,6 @@
     background-color: #ddd; /* Change this to the desired hover color */
   }
 
+  .tabcontent {
+    padding-top: 2000px; /* Adjust this value as needed */
+  }
