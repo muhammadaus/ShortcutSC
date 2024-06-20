@@ -300,7 +300,7 @@ function App() {
 
   return (
     <div className="App">
-  <Navigation />
+  <Navigation account={account} />
   <button onClick={handleConnect} style={{
     backgroundColor: '#000000',
     color: 'white',

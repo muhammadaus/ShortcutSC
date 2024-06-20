@@ -12,8 +12,12 @@
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
     "@walletconnect/ethereum-provider": "^2.13.1",
+    "arraybuffer-to-buffer": "^0.0.7",
     "bootstrap": "^5.2.0",
+    "buffer": "^6.0.3",
     "express": "^4.19.2",
+    "keccak256": "^1.0.6",
+    "merkletreejs": "^0.3.11",
     "node": "^21.7.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.4.0",
@@ -55,6 +59,8 @@
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^1.0.2",
-    "hardhat": "^2.22.2"
+    "chai": "^4.4.1",
+    "hardhat": "^2.22.2",
+    "mocha": "^8.4.0"
   }
 }

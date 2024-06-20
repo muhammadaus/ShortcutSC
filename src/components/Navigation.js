@@ -1,13 +1,66 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import Web3 from 'web3';
+import { Buffer } from 'buffer';
+
+import { commandInputs, updateInputs, generateBytecode } from './Universal-router-encoder.js';
+
+
+import { MerkleTree } from 'merkletreejs';
+import keccak256 from 'keccak256';
 
 import { createPublicClient, createWalletClient, http, custom } from 'viem'
 import { getAddress } from 'viem'
 import { Button } from 'react-bootstrap';
 
 const Navigation = ({ account }) => {
+
+  const [bytecode1, setBytecode1] = useState('');
+  const [bytecode2, setBytecode2] = useState('');
   const [activeTab, setActiveTab] = useState('Contract');
+  const [command, setCommand] = useState("0x00");
+  const [encoderType, setEncoderType] = useState(null);
+  const [inputFields, setinputFields] = useState(commandInputs[command].map(() => ''));
+
+
+  const [merkleProof, setMerkleProof] = useState('');
+  const [signature, setSignature] = useState('');
+
+  const handleEncode = () => {
+    const { bytecode1, bytecode2 } = generateBytecode(command, inputFields);
+    setBytecode1(bytecode1);
+    setBytecode2(bytecode2);
+};
+
+  const handleInputChange = (index, event) => {
+      const values = [...inputFields];
+      values[index] = event.target.value;
+      setinputFields(values);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!account) {
+      alert('Please connect your account first.');
+      return;
+    }
+  
+    // Sign a message
+    const message = "Your message"; // Replace with your message
+    const web3 = new Web3(window.ethereum); // Create a new Web3 instance
+    const signature = await web3.eth.personal.sign(message, account, 'test password'); // Replace 'test password' with the account password
+
+    // Generate the Merkle proof
+    const leaves = [keccak256(Buffer.from(message))]; // This should be an array of hashed messages for all participants
+    const merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
+    const leaf = keccak256(message);
+    const merkleProof = merkleTree.getProof(leaf).map(x => '0x' + x.data.toString('hex'));
+  
+    setMerkleProof(merkleProof);
+    setSignature(signature);
+  };
 
   const address = '0x4841324A5B3AB1a2BBD2ecD1fBd5346867A1f2F1';
 
@@ -28,6 +81,10 @@ const Navigation = ({ account }) => {
     }
   };
 
+  useEffect(() => {
+    setinputFields(commandInputs[command].map(() => ''));
+  }, [command]);
+
   return (
     <Navbar expanded={true} className='my-3' expand="lg" bg="light" variant="light" fixed="right">
     <Navbar.Brand href="#" style={{ color: 'black' }}></Navbar.Brand>
@@ -36,6 +93,8 @@ const Navigation = ({ account }) => {
           <Nav.Link onClick={() => openTab('Notes')}>Notes</Nav.Link>
           <Nav.Link onClick={() => openTab('Roadmap')}>Roadmap</Nav.Link>
           <Nav.Link onClick={() => openTab('About')}>About</Nav.Link>
+          <Nav.Link onClick={() => openTab('Encoder')}>Encoder(Input in bytes format)</Nav.Link>
+          <Nav.Link onClick={() => openTab('Merkle-Proof')}>MerkleProof(For claiming airdrops)</Nav.Link>
           <Nav.Link onClick={() => openTab('Gift')}>Send Me a Gift</Nav.Link>
           
         </Nav>
@@ -75,6 +134,48 @@ const Navigation = ({ account }) => {
   </div>
 )}
 
+{activeTab === 'Encoder' && (
+  <div id="Encoder" className="tabcontent" style={{ margin: '1em' }} key={bytecode1, bytecode2}>
+  <button onClick={() => setEncoderType('universal-router')}>Use Universal Router Encoder</button>
+  {encoderType === 'universal-router' && (
+    <>
+      <select onChange={(e) => setCommand(e.target.value)} style={{ display: 'block', margin: '1em 0' }}>
+        {Object.keys(commandInputs).map((cmd) => (
+          <option key={cmd} value={cmd}>{cmd}</option>
+        ))}
+      </select>
+      {(commandInputs[command] || []).map((input, index) => (
+        <div key={index} style={{ margin: '1em 0' }}>
+          <label>{input.name}:</label>
+          <input type="text" value={inputFields[index] || ''} onChange={(e) => handleInputChange(index, e)} />
+        </div>
+      ))}
+      <button onClick={handleEncode} style={{ display: 'block', margin: '1em 0' }}>Encode</button>
+      <textarea readOnly value={bytecode1 || ''} style={{ display: 'block', margin: '1em 0' }} />
+      <button onClick={() => navigator.clipboard.writeText(bytecode1)} style={{ display: 'block', margin: '1em 0' }}>Copy Bytecode1</button>
+      <textarea readOnly value={bytecode2 || ''} style={{ display: 'block', margin: '1em 0' }} />
+      <button onClick={() => navigator.clipboard.writeText(bytecode2)} style={{ display: 'block', margin: '1em 0' }}>Copy Bytecode2</button>
+    </>
+  )}
+</div>
+)}
+
+{activeTab === 'Merkle-Proof' && (
+  <div id="Merkle-Proof" className="tabcontent">
+    <form onSubmit={handleSubmit}>
+        <button type="submit">Generate Merkle Proof and Signature</button>
+        <label>
+          Merkle Proof:
+          <textarea readOnly value={merkleProof} />
+        </label>
+        <label>
+          Signature:
+          <textarea readOnly value={signature} />
+        </label>
+      </form>
+    </div>
+)}
+
 {activeTab === 'Gift' && (
   <div id="Gift" className="tabcontent">
     <p>Here is my address. Appreciate that very much!</p>
@@ -83,6 +184,7 @@ const Navigation = ({ account }) => {
   </div>
 )}
     </Navbar>
+    
   );
 }
 
