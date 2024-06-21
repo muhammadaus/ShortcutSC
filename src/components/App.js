@@ -1,14 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useRef } from 'react';
-import Navigation from './Navigation';
-import { CoinbaseWalletSDK } from '@coinbase/wallet-sdk'
+import React, { useEffect, useState, useRef } from 'react';
 import Select from 'react-select';
-
-import { getAbiItem } from 'viem'
-import { getContract } from 'viem'
-import { createPublicClient, createWalletClient, http, custom } from 'viem'
-import { getAddress } from 'viem'
-import { parseEther } from 'viem'
+import { CoinbaseWalletSDK } from '@coinbase/wallet-sdk';
+import Navigation from './Navigation';
+import { getAbiItem, getContract, createPublicClient, createWalletClient, custom, getAddress, parseEther } from 'viem';
 
 
 const viemChains = require('viem/chains');

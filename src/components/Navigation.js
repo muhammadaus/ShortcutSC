@@ -2,17 +2,13 @@ import React, { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Web3 from 'web3';
-import { Buffer } from 'buffer';
 
-import { commandInputs, updateInputs, generateBytecode } from './Universal-router-encoder.js';
+import { commandInputs, generateBytecode } from './Universal-router-encoder.js';
 
 
 import { MerkleTree } from 'merkletreejs';
-import keccak256 from 'keccak256';
+import { keccak256 } from 'js-sha3';
 
-import { createPublicClient, createWalletClient, http, custom } from 'viem'
-import { getAddress } from 'viem'
-import { Button } from 'react-bootstrap';
 
 const Navigation = ({ account }) => {
 
@@ -53,7 +49,7 @@ const Navigation = ({ account }) => {
     const signature = await web3.eth.personal.sign(message, account, 'test password'); // Replace 'test password' with the account password
 
     // Generate the Merkle proof
-    const leaves = [keccak256(Buffer.from(message))]; // This should be an array of hashed messages for all participants
+    const leaves = [keccak256(message), keccak256('another message')];
     const merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
     const leaf = keccak256(message);
     const merkleProof = merkleTree.getProof(leaf).map(x => '0x' + x.data.toString('hex'));
@@ -135,7 +131,7 @@ const Navigation = ({ account }) => {
 )}
 
 {activeTab === 'Encoder' && (
-  <div id="Encoder" className="tabcontent" style={{ margin: '1em' }} key={bytecode1, bytecode2}>
+  <div id="Encoder" className="tabcontent" style={{ margin: '1em' }} key={`${bytecode1}-${bytecode2}`}>
   <button onClick={() => setEncoderType('universal-router')}>Use Universal Router Encoder</button>
   {encoderType === 'universal-router' && (
     <>
