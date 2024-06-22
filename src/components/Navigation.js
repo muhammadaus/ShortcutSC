@@ -19,6 +19,9 @@ const Navigation = ({ account }) => {
   const [encoderType, setEncoderType] = useState(null);
   const [inputFields, setinputFields] = useState(commandInputs[command].map(() => ''));
 
+  const [merkleTree, setMerkleTree] = useState('');
+  const [leaf, setLeaf] = useState('');
+
 
   const [merkleProof, setMerkleProof] = useState('');
   const [signature, setSignature] = useState('');
@@ -35,27 +38,13 @@ const Navigation = ({ account }) => {
       setinputFields(values);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const getMerkleProof = (merkleTree, leaf) => {
     if (!account) {
       alert('Please connect your account first.');
       return;
     }
-  
-    // Sign a message
-    const message = "Your message"; // Replace with your message
-    const web3 = new Web3(window.ethereum); // Create a new Web3 instance
-    const signature = await web3.eth.personal.sign(message, account, 'test password'); // Replace 'test password' with the account password
-
-    // Generate the Merkle proof
-    const leaves = [keccak256(message), keccak256('another message')];
-    const merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
-    const leaf = keccak256(message);
     const merkleProof = merkleTree.getProof(leaf).map(x => '0x' + x.data.toString('hex'));
-  
     setMerkleProof(merkleProof);
-    setSignature(signature);
   };
 
   const address = '0x4841324A5B3AB1a2BBD2ecD1fBd5346867A1f2F1';
@@ -158,15 +147,19 @@ const Navigation = ({ account }) => {
 
 {activeTab === 'Merkle-Proof' && (
   <div id="Merkle-Proof" className="tabcontent">
-    <form onSubmit={handleSubmit}>
-        <button type="submit">Generate Merkle Proof and Signature</button>
+    <form onSubmit={getMerkleProof}>
+        <label>
+          Merkle Tree:
+          <textarea onChange={e => setMerkleTree(e.target.value)} />
+        </label>
+        <label>
+          Leaf:
+          <textarea onChange={e => setLeaf(e.target.value)} />
+        </label>
+        <button type="submit">Generate Merkle Proof</button>
         <label>
           Merkle Proof:
           <textarea readOnly value={merkleProof} />
-        </label>
-        <label>
-          Signature:
-          <textarea readOnly value={signature} />
         </label>
       </form>
     </div>
