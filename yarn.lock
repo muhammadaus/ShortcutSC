@@ -10244,7 +10244,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:^14.0.4":
+"next@npm:^14.0.4, next@npm:^14.2.4":
   version: 14.2.4
   resolution: "next@npm:14.2.4"
   dependencies:
@@ -12184,6 +12184,7 @@ __metadata:
   dependencies:
     husky: ^8.0.1
     lint-staged: ^13.0.3
+    next: ^14.2.4
     nextjs: ^0.0.3
     react-select: ^5.8.0
   languageName: unknown

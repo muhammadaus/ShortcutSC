@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { PencilIcon } from "@heroicons/react/24/outline";
+import { Address } from "~~/components/scaffold-eth";
 import Select from 'react-select';
 import { useState } from 'react';
 
@@ -15,6 +16,7 @@ import { setContracts } from '~~/utils/scaffold-eth/contract';
 import scaffoldConfig, { updateTargetNetworks } from '~~/scaffold.config';
 
 
+const viemChains = require('viem/chains');
 
 const Home: NextPage = () => {
   // const { address: connectedAddress } = useAccount(); // From base code
@@ -108,8 +110,8 @@ const Home: NextPage = () => {
 
     console.log('Updated contracts:', contractUpdate);
   
-    // function updateContracts(updateDeployedContract: ContractUpdate) {
-    // }
+    function updateContracts(updateDeployedContract: ContractUpdate) {
+    }
     // console.log('contractUpdate:', contractUpdate);
     // window.location.href = '/readwrite';
     setIsContractLoaded(true);
