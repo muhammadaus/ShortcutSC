@@ -1,4 +1,6 @@
+import { Chain, defineChain } from "viem";
 import * as chains from "viem/chains";
+import { contracts } from "~~/utils/scaffold-eth/contract";
 
 export type ScaffoldConfig = {
   targetNetworks: readonly chains.Chain[];
@@ -8,9 +10,27 @@ export type ScaffoldConfig = {
   onlyLocalBurnerWallet: boolean;
 };
 
+// function findChainNameByChainId(chains: { [key: string]: any }, chainId: number): string | undefined {
+//   for (const chainName in chains) {
+//     if (chains.hasOwnProperty(chainName) && chains[chainName].chainId === chainId) {
+//       return chainName;
+//     }
+//   }
+//   return undefined;
+// }
+
+// // Example usage
+// const chainIdToFind = Object.keys(contracts)[0]; // Example chain ID to find
+// const chainName = findChainNameByChainId(chains, chainIdToFind);
+// if (chainName) {
+//   console.log(`Chain ID ${chainIdToFind} corresponds to: ${chainName}`);
+// } else {
+//   console.log(`Chain with ID ${chainIdToFind} not found.`);
+// }
+
 const scaffoldConfig = {
   // The networks on which your DApp is live
-  targetNetworks: [chains.hardhat],
+  targetNetworks: [chains.mainnet],
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect if you only target the local network (default is 4000)
@@ -31,5 +51,15 @@ const scaffoldConfig = {
   // Only show the Burner Wallet when running on hardhat network
   onlyLocalBurnerWallet: true,
 } as const satisfies ScaffoldConfig;
+
+export function updateTargetNetworks(selectedNetwork: keyof typeof chains) {
+  // Check if the selected network exists in the chains object
+  if (chains[selectedNetwork]) {
+    scaffoldConfig.targetNetworks = [chains[selectedNetwork]];
+    console.log(`Updated targetNetworks to: ${selectedNetwork}`);
+  } else {
+    console.error(`The selected network (${selectedNetwork}) does not exist.`);
+  }
+}
 
 export default scaffoldConfig;

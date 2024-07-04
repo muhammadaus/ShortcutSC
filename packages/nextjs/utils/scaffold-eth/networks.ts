@@ -134,3 +134,5 @@ export function getTargetNetworks(): ChainWithAttributes[] {
     ...NETWORKS_EXTRA_DATA[targetNetwork.id],
   }));
 }
+
+console.log(getTargetNetworks());

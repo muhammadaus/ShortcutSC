@@ -34,7 +34,7 @@ type AddExternalFlag<T> = {
   };
 };
 
-const deepMergeContracts = <L extends Record<PropertyKey, any>, E extends Record<PropertyKey, any>>(
+export const deepMergeContracts = <L extends Record<PropertyKey, any>, E extends Record<PropertyKey, any>>(
   local: L,
   external: E,
 ) => {
@@ -73,7 +73,12 @@ export type GenericContractsDeclaration = {
   };
 };
 
-export const contracts = contractsData as GenericContractsDeclaration | null;
+export let contracts = contractsData as GenericContractsDeclaration | null;
+
+// Setter function to update `contracts`
+export function setContracts(newContracts: GenericContractsDeclaration | null): void {
+    contracts = newContracts;
+}
 
 type ConfiguredChainId = (typeof scaffoldConfig)["targetNetworks"][0]["id"];
 

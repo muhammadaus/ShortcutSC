@@ -4,6 +4,63 @@
  */
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
-const deployedContracts = {} as const;
+let deployedContracts = {
+  1: {
+    YourContract: {
+      address: "0x0000000000000000000000000000000000000000",
+      abi: [
+        // ABI details omitted for brevity
+      ],
+      inheritedFunctions: {},
+    },
+  },
+} as const;
+
+// Function to update deployedContracts with new data from updateDeployedContract
+function updateContracts() {
+  if (updateDeployedContract) {
+    const { networkId, contractName, address, abi } = updateDeployedContract;
+
+    if (!deployedContracts[networkId]) {
+      deployedContracts[networkId] = {};
+    }
+
+    deployedContracts[networkId][contractName] = {
+      address,
+      abi,
+      inheritedFunctions: {}, // Reset or keep empty as per requirement
+    };
+    console.log('deployedContracts:', deployedContracts);
+  }
+}
+
+// // Call the function to perform the update if updateDeployedContract is available
+export { updateContracts };
 
 export default deployedContracts satisfies GenericContractsDeclaration;
+
+// localStorage.setItem('deployedContracts', JSON.stringify(deployedContracts));
+
+// export function initializeDeployedContracts() {
+//   if (typeof window === 'undefined') {
+//     // Exit the function if not running in a browser environment
+//     return;
+//   }
+
+//   try {
+//     // Set deployedContracts in localStorage if not already set
+//     if (!localStorage.getItem('deployedContracts')) {
+//       localStorage.setItem('deployedContracts', JSON.stringify(deployedContracts));
+//     }
+
+//     // Retrieve and parse the stored contracts
+//     const storedContractsString = localStorage.getItem('deployedContracts');
+//     const storedContracts = storedContractsString ? JSON.parse(storedContractsString) : null;
+
+//     // Optional: Validate storedContracts structure here
+
+//   } catch (error) {
+//     console.error("Error initializing deployed contracts:", error);
+//     // Handle error (e.g., corrupted data in localStorage)
+//   }
+// }

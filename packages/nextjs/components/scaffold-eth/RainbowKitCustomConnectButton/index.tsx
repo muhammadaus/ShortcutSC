@@ -1,6 +1,7 @@
 "use client";
 
 // @refresh reset
+import React, { useEffect } from "react"; // Step 1: Import useEffect
 import { Balance } from "../Balance";
 import { AddressInfoDropdown } from "./AddressInfoDropdown";
 import { AddressQRCodeModal } from "./AddressQRCodeModal";
@@ -17,6 +18,11 @@ import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 export const RainbowKitCustomConnectButton = () => {
   const networkColor = useNetworkColor();
   const { targetNetwork } = useTargetNetwork();
+
+  useEffect(() => {
+    // Actions to perform when targetNetwork changes
+    console.log("Target network changed to:", targetNetwork);
+  }, [targetNetwork]);
 
   return (
     <ConnectButton.Custom>
@@ -37,7 +43,8 @@ export const RainbowKitCustomConnectButton = () => {
                 );
               }
 
-              if (chain.unsupported || chain.id !== targetNetwork.id) {
+              if (chain.unsupported) {
+                console.log(`chain.unsupported: ${chain.unsupported}`);
                 return <WrongNetworkDropdown />;
               }
 
