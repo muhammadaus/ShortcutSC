@@ -6,7 +6,7 @@ import type { NextPage } from "next";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import Select from 'react-select';
 import { useState } from 'react';
-import viemChains from 'viem/chains';
+import * as viemChains from 'viem/chains';
 
 import React from 'react';
 
