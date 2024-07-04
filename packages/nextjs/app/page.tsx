@@ -2,9 +2,8 @@
 
 import Link from "next/link";
 import type { NextPage } from "next";
-import { useAccount } from "wagmi";
+// import { useAccount } from "wagmi"; // From base code
 import { PencilIcon } from "@heroicons/react/24/outline";
-import { Address } from "~~/components/scaffold-eth";
 import Select from 'react-select';
 import { useState } from 'react';
 
@@ -13,10 +12,27 @@ import React from 'react';
 import { deepMergeContracts as importedContracts } from '~~/utils/scaffold-eth/contract';
 import { setContracts } from '~~/utils/scaffold-eth/contract';
 
-import scaffoldConfig, { updateTargetNetworks } from '~~/scaffold.config';
+import { updateTargetNetworks } from '~~/scaffold.config';
 
 
 const viemChains = require('viem/chains');
+
+interface ChainOption {
+  value: string;
+  label: string;
+}
+
+interface ContractInfo {
+  address: string;
+  abi: any[]; // Consider defining a more specific type for ABI
+  inheritedFunctions: Record<string, unknown>;
+}
+
+interface Contracts {
+  [key: string]: {
+    [contractName: string]: ContractInfo;
+  };
+}
 
 const Home: NextPage = () => {
   // const { address: connectedAddress } = useAccount(); // From base code
@@ -27,11 +43,10 @@ const Home: NextPage = () => {
   const [network, setNetwork] = useState('mainnet');
   const [isContractLoaded, setIsContractLoaded] = useState(false);
 
+  const options: ChainOption[] = Object.keys(viemChains).map(chain => ({ value: chain, label: chain }));
 
-  const options = Object.keys(viemChains).map(chain => ({ value: chain, label: chain }));
-
-  const handleAbiChange = (e) => {
-    const abi = e.target.value;
+  const handleAbiChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const abi: any[] = JSON.parse(e.target.value);
     try {
       JSON.parse(abi);
       setIsAbiInvalid(false);
@@ -40,11 +55,9 @@ const Home: NextPage = () => {
     }
   };
 
-  const handleNetworkChange = (selectedNetwork) => {
-    console.log(`Changing network to: ${selectedNetwork}`); // Debug log
+  const handleNetworkChange = (selectedNetwork: SingleValue<ChainOption>) => {
     setNetwork(selectedNetwork);
     updateTargetNetworks(selectedNetwork);
-    console.log(scaffoldConfig);
   };
 
 
@@ -59,9 +72,10 @@ const Home: NextPage = () => {
       return;
     }
   
-    let abi;
+    type ABIElement = any;
+    let abi: ABIElement[];
     try {
-      const abiJson = document.getElementById('contractABI').value;
+      const abiJson = document.getElementById('contractABI')!.value;
       abi = JSON.parse(abiJson);
     } catch (error) {
       console.error('Invalid ABI:', error);
@@ -69,20 +83,26 @@ const Home: NextPage = () => {
     }
   
     // Prepare the contract update
-    const contractUpdate = {
-      [viemChains[network].id]: {
-        YourContract: {
-          address: address,
-          abi: abi,
-        }
-      }
-    };
-
     interface ContractInfo {
       address: string;
       abi: any[];
       inheritedFunctions: Record<string, unknown>;
     }
+
+    interface NetworkContracts {
+      [key: string]: {
+        [contractName: string]: ContractInfo;
+      };
+    }
+    
+    const contractUpdate: NetworkContracts = {
+      [viemChains[network].id]: {
+        YourContract: {
+          address: address,
+          abi: abi as any[],
+        }
+      }
+    };
     
     interface Contracts {
       [key: string]: {
@@ -107,13 +127,6 @@ const Home: NextPage = () => {
     } else {
       console.error('Contracts variable is null');
     }
-
-    console.log('Updated contracts:', contractUpdate);
-  
-    function updateContracts(updateDeployedContract: ContractUpdate) {
-    }
-    // console.log('contractUpdate:', contractUpdate);
-    // window.location.href = '/readwrite';
     setIsContractLoaded(true);
   };
 
