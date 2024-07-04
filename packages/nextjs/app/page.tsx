@@ -5,10 +5,8 @@ import type { NextPage } from "next";
 // import { useAccount } from "wagmi"; // From base code
 import { PencilIcon } from "@heroicons/react/24/outline";
 import Select from 'react-select';
-import { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import * as viemChains from 'viem/chains';
-
-import React from 'react';
 
 import { deepMergeContracts as importedContracts } from '~~/utils/scaffold-eth/contract';
 import { setContracts } from '~~/utils/scaffold-eth/contract';
