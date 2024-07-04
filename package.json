@@ -44,6 +44,7 @@
     "node": ">=18.17.0"
   },
   "dependencies": {
+    "nextjs": "^0.0.3",
     "react-select": "^5.8.0"
   }
 }

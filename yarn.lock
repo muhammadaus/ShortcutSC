@@ -10302,6 +10302,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nextjs@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "nextjs@npm:0.0.3"
+  checksum: 863a1121b51eda269b59955ff3d63e56abc53a67f93774896b8b9fdcf89c7cb8b67bd2c136ab622aa1cc8797c1733d03388e3e4778fc85addf49942c933a8372
+  languageName: node
+  linkType: hard
+
 "node-addon-api@npm:^2.0.0":
   version: 2.0.2
   resolution: "node-addon-api@npm:2.0.2"
@@ -12177,6 +12184,7 @@ __metadata:
   dependencies:
     husky: ^8.0.1
     lint-staged: ^13.0.3
+    nextjs: ^0.0.3
     react-select: ^5.8.0
   languageName: unknown
   linkType: soft

@@ -4,29 +4,20 @@ import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { PencilIcon } from "@heroicons/react/24/outline";
-import { Address } from "~~/components/scaffold-eth";
 import Select from 'react-select';
 import { useState } from 'react';
-
-import * as chains from "viem/chains";
-import { Chain, defineChain } from 'viem'
 
 import React from 'react';
 
 import { deepMergeContracts as importedContracts } from '~~/utils/scaffold-eth/contract';
 import { setContracts } from '~~/utils/scaffold-eth/contract';
-import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
-import { ContractUI } from "~~/app/readwrite/_components/contract/ContractUI";
-
-import { updateContracts } from "~~/contracts/deployedContracts";
 
 import scaffoldConfig, { updateTargetNetworks } from '~~/scaffold.config';
 
 
-const viemChains = require('viem/chains');
 
 const Home: NextPage = () => {
-  const { address: connectedAddress } = useAccount();
+  // const { address: connectedAddress } = useAccount(); // From base code
   const [address, setAddress] = useState('');
   const [isAddressEmpty, setIsAddressEmpty] = useState(true);
   const [isAddressTooShort, setIsAddressTooShort] = useState(false);
@@ -117,8 +108,8 @@ const Home: NextPage = () => {
 
     console.log('Updated contracts:', contractUpdate);
   
-    function updateContracts(updateDeployedContract: ContractUpdate) {
-    }
+    // function updateContracts(updateDeployedContract: ContractUpdate) {
+    // }
     // console.log('contractUpdate:', contractUpdate);
     // window.location.href = '/readwrite';
     setIsContractLoaded(true);
