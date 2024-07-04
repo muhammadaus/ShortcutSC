@@ -6,6 +6,7 @@ import type { NextPage } from "next";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import Select from 'react-select';
 import { useState } from 'react';
+import viemChains from 'viem/chains';
 
 import React from 'react';
 
@@ -13,9 +14,6 @@ import { deepMergeContracts as importedContracts } from '~~/utils/scaffold-eth/c
 import { setContracts } from '~~/utils/scaffold-eth/contract';
 
 import { updateTargetNetworks } from '~~/scaffold.config';
-
-
-const viemChains = require('viem/chains');
 
 interface ChainOption {
   value: string;
