@@ -42,8 +42,5 @@
   },
   "engines": {
     "node": ">=18.17.0"
-  },
-  "dependencies": {
-    "react-select": "^5.8.0"
   }
 }
