@@ -1,1 +1,1 @@
-This is a prototype for a decentralized Smart Contract Frontend interactions.
+This is a prototype for decentralized smart contract interactions.

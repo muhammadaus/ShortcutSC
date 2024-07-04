@@ -1,67 +1,46 @@
 {
-  "name": "interactsc",
-  "homepage": ".",
-  "version": "1.0.0",
-  "description": "",
-  "dependencies": {
-    "20": "^3.1.9",
-    "@coinbase/waas-sdk-web-react": "^3.2.2",
-    "@coinbase/wallet-sdk": "^4.0.3",
-    "@nomicfoundation/edr-darwin-arm64": "^0.3.2",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@walletconnect/ethereum-provider": "^2.13.1",
-    "arraybuffer-to-buffer": "^0.0.7",
-    "bootstrap": "^5.2.0",
-    "buffer": "^6.0.3",
-    "express": "^4.19.2",
-    "js-sha3": "^0.9.3",
-    "keccak256": "^1.0.6",
-    "merkletreejs": "^0.3.11",
-    "node": "^21.7.1",
-    "react": "^18.2.0",
-    "react-bootstrap": "^2.4.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1",
-    "react-select": "^5.8.0",
-    "react-transition-group": "^4.4.5",
-    "typescript": "^5.4.5",
-    "viem": "^2.13.3",
-    "wagmi": "^2.10.2",
-    "web-vitals": "^2.1.4",
-    "web3": "^4.9.0"
+  "name": "se-2",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/hardhat",
+      "packages/nextjs"
+    ]
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "account": "yarn workspace @se-2/hardhat account",
+    "chain": "yarn workspace @se-2/hardhat chain",
+    "fork": "yarn workspace @se-2/hardhat fork",
+    "deploy": "yarn workspace @se-2/hardhat deploy",
+    "verify": "yarn workspace @se-2/hardhat verify",
+    "hardhat-verify": "yarn workspace @se-2/hardhat hardhat-verify",
+    "compile": "yarn workspace @se-2/hardhat compile",
+    "generate": "yarn workspace @se-2/hardhat generate",
+    "flatten": "yarn workspace @se-2/hardhat flatten",
+    "hardhat:lint": "yarn workspace @se-2/hardhat lint",
+    "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
+    "hardhat:format": "yarn workspace @se-2/hardhat format",
+    "hardhat:test": "yarn workspace @se-2/hardhat test",
+    "test": "yarn hardhat:test",
+    "format": "yarn next:format && yarn hardhat:format",
+    "start": "yarn workspace @se-2/nextjs dev",
+    "next:lint": "yarn workspace @se-2/nextjs lint",
+    "next:format": "yarn workspace @se-2/nextjs format",
+    "next:check-types": "yarn workspace @se-2/nextjs check-types",
+    "next:build": "yarn workspace @se-2/nextjs build",
+    "next:serve": "yarn workspace @se-2/nextjs serve",
+    "postinstall": "husky install",
+    "precommit": "lint-staged",
+    "vercel": "yarn workspace @se-2/nextjs vercel",
+    "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo"
   },
-  "author": "muhammadaus",
-  "license": "ISC",
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "packageManager": "yarn@3.2.3",
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
-    "chai": "^4.4.1",
-    "hardhat": "^2.22.2",
-    "mocha": "^8.4.0"
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3"
+  },
+  "engines": {
+    "node": ">=18.17.0"
   }
 }
