@@ -58,7 +58,7 @@ const Home: NextPage = () => {
     } else {
       // Handle the case where selectedNetwork is null, e.g., by not calling updateTargetNetworks or calling it with a default value
     }
-  };ß
+  };
 
 
   const handleReadWrite = async () => {
