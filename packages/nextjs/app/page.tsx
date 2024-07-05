@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { NextPage } from "next";
 // import { useAccount } from "wagmi"; // From base code
 import { PencilIcon } from "@heroicons/react/24/outline";
-import Select from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import React, { useState, ChangeEvent } from 'react';
 import * as viemChains from 'viem/chains';
 
