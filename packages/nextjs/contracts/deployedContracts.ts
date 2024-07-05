@@ -4,6 +4,16 @@
  */
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
+interface DeployedContracts {
+  [networkId: number]: { [contractName: string]: ContractInfo };
+}
+
+interface ContractInfo {
+  address: string;
+  abi: any[]; // Consider using a more specific type for ABI if possible
+  inheritedFunctions?: Record<string, unknown>;
+}
+
 let deployedContracts = {
   1: {
     YourContract: {
@@ -14,10 +24,10 @@ let deployedContracts = {
       inheritedFunctions: {},
     },
   },
-} as const;
+};
 
 // Function to update deployedContracts with new data from updateDeployedContract
-function updateContracts() {
+function updateContracts(updateDeployedContract: { networkId: number; contractName: string; address: string; abi: any[] }) {
   if (updateDeployedContract) {
     const { networkId, contractName, address, abi } = updateDeployedContract;
 
@@ -38,29 +48,3 @@ function updateContracts() {
 export { updateContracts };
 
 export default deployedContracts satisfies GenericContractsDeclaration;
-
-// localStorage.setItem('deployedContracts', JSON.stringify(deployedContracts));
-
-// export function initializeDeployedContracts() {
-//   if (typeof window === 'undefined') {
-//     // Exit the function if not running in a browser environment
-//     return;
-//   }
-
-//   try {
-//     // Set deployedContracts in localStorage if not already set
-//     if (!localStorage.getItem('deployedContracts')) {
-//       localStorage.setItem('deployedContracts', JSON.stringify(deployedContracts));
-//     }
-
-//     // Retrieve and parse the stored contracts
-//     const storedContractsString = localStorage.getItem('deployedContracts');
-//     const storedContracts = storedContractsString ? JSON.parse(storedContractsString) : null;
-
-//     // Optional: Validate storedContracts structure here
-
-//   } catch (error) {
-//     console.error("Error initializing deployed contracts:", error);
-//     // Handle error (e.g., corrupted data in localStorage)
-//   }
-// }
