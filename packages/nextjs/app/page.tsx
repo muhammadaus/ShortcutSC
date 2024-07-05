@@ -196,19 +196,19 @@ const Home: NextPage = () => {
 
         {/* Smart Contract Address Input */}
         <input 
-          type="text" 
-          placeholder=" Enter Smart Contract Address" 
-          maxLength="42" 
-          minLength="42" 
-          style={{ width: '400px', borderRadius: '1.5rem' }}
-          value={address} 
-          onChange={e => {
-            const address = e.target.value;
-            setAddress(address);
-            setIsAddressEmpty(!address);
-            setIsAddressTooShort(address.length < 42);
-          }} 
-        />
+        type="text" 
+        placeholder=" Enter Smart Contract Address" 
+        maxLength={42} 
+        minLength={42} 
+        style={{ width: '400px', borderRadius: '1.5rem' }}
+        value={address} 
+        onChange={e => {
+          const address = e.target.value;
+          setAddress(address);
+          setIsAddressEmpty(!address);
+          setIsAddressTooShort(address.length < 42);
+        }} 
+      />
 
         {/* Contract ABI Input */}
         <textarea 
