@@ -165,9 +165,9 @@ const Home: NextPage = () => {
           id="networkSelector"
           defaultValue={options.find(option => option.value === 'mainnet')}
           options={options}
-          onChange={selectedOption => {
+          onChange={(selectedOption) => {
             if (selectedOption) { // Check if selectedOption is not null
-              handleNetworkChange(selectedOption.value);
+              handleNetworkChange(selectedOption); // Pass the entire selectedOption object
             } else {
               // Handle the case when selectedOption is null, if necessary
             }
