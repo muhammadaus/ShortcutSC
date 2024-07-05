@@ -128,7 +128,7 @@ const Home: NextPage = () => {
   
     // Check if contracts is not null and update it
     let updatedContracts;
-    if (importedContracts(contracts, contracts)) {
+    if (importedContracts(contracts as GenericContractsDeclaration, contracts as GenericContractsDeclaration)) {
       setContracts(contractUpdate);
     } else {
       console.error('Contracts variable is null');
