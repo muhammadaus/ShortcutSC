@@ -89,10 +89,12 @@ const Home: NextPage = () => {
     }
   
     // Prepare the contract update
+    type InheritedFunctions = Record<string, string>;
+
     interface ContractInfo {
       address: string;
       abi: any[];
-      inheritedFunctions: Record<string, unknown>;
+      inheritedFunctions: InheritedFunctions;
     }
 
     interface NetworkContracts {
