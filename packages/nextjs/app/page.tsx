@@ -101,7 +101,7 @@ const Home: NextPage = () => {
     }
     
     const contractUpdate: NetworkContracts = {
-      [viemChains[network].id]: {
+      [viemChains[network as keyof typeof viemChains].id]: {
         YourContract: {
           address: address,
           abi: abi as any[], // Ensure this matches the expected type in ContractInfo
