@@ -14,7 +14,7 @@ interface ContractInfo {
   inheritedFunctions?: Record<string, unknown>;
 }
 
-let deployedContracts = {
+let deployedContracts: DeployedContracts = {
   1: {
     YourContract: {
       address: "0x0000000000000000000000000000000000000000",
