@@ -8,8 +8,9 @@ import Select, { SingleValue } from 'react-select';
 import React, { useState, ChangeEvent } from 'react';
 import * as viemChains from 'viem/chains';
 
-import { deepMergeContracts as importedContracts } from '~~/utils/scaffold-eth/contract';
-import { setContracts } from '~~/utils/scaffold-eth/contract';
+import { GenericContractsDeclaration, setContracts, deepMergeContracts as importedContracts } from '~~/utils/scaffold-eth/contract';
+// import { setContracts } from '~~/utils/scaffold-eth/contract';
+// import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 import { updateTargetNetworks } from '~~/scaffold.config';
 
