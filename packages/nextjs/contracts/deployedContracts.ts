@@ -11,8 +11,11 @@ interface DeployedContracts {
 interface ContractInfo {
   address: string;
   abi: any[]; // Consider using a more specific type for ABI if possible
-  inheritedFunctions?: Record<string, unknown>;
+  inheritedFunctions?: InheritedFunctions; // Adjusted to match the expected type
 }
+
+// Assuming InheritedFunctions should be a Record<string, string>, define it accordingly
+type InheritedFunctions = Record<string, string>;
 
 let deployedContracts: DeployedContracts = {
   1: {
@@ -21,7 +24,7 @@ let deployedContracts: DeployedContracts = {
       abi: [
         // ABI details omitted for brevity
       ],
-      inheritedFunctions: {},
+      inheritedFunctions: {}, // Now correctly typed
     },
   },
 };
@@ -38,13 +41,13 @@ function updateContracts(updateDeployedContract: { networkId: number; contractNa
     deployedContracts[networkId][contractName] = {
       address,
       abi,
-      inheritedFunctions: {}, // Reset or keep empty as per requirement
+      inheritedFunctions: {}, // Ensure this matches the expected type
     };
     console.log('deployedContracts:', deployedContracts);
   }
 }
 
-// // Call the function to perform the update if updateDeployedContract is available
 export { updateContracts };
 
-export default deployedContracts satisfies GenericContractsDeclaration;
+// Assuming GenericContractsDeclaration expects a structure similar to DeployedContracts but with specific types for abi and inheritedFunctions
+export default deployedContracts;
