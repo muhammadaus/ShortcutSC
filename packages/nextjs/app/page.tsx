@@ -51,7 +51,8 @@ const Home: NextPage = () => {
   };
 
   const handleNetworkChange = (selectedNetwork: SingleValue<ChainOption>) => {
-    setNetwork(selectedNetwork);
+    const networkValue = selectedNetwork ? selectedNetwork.value : '';
+    setNetwork(networkValue);
     updateTargetNetworks(selectedNetwork);
   };
 
