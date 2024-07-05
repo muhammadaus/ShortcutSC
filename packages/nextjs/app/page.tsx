@@ -104,8 +104,8 @@ const Home: NextPage = () => {
       [viemChains[network].id]: {
         YourContract: {
           address: address,
-          abi: abi as any[],
-          inheritedFunctions: [] // Assuming inheritedFunctions is an array. Adjust according to your type definition.
+          abi: abi as any[], // Ensure this matches the expected type in ContractInfo
+          inheritedFunctions: {} // Adjusted to an empty object to match Record<string, unknown> type
         }
       }
     };
