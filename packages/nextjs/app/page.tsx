@@ -105,6 +105,7 @@ const Home: NextPage = () => {
         YourContract: {
           address: address,
           abi: abi as any[],
+          inheritedFunctions: [] // Assuming inheritedFunctions is an array. Adjust according to your type definition.
         }
       }
     };
