@@ -42,12 +42,11 @@ const Home: NextPage = () => {
   const options: ChainOption[] = Object.keys(viemChains).map(chain => ({ value: chain, label: chain }));
 
   const handleAbiChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const abi: any[] = JSON.parse(e.target.value);
     try {
-      JSON.parse(abi);
-      setIsAbiInvalid(false);
+      const abi: any[] = JSON.parse(e.target.value); // Correctly parses the JSON string from the textarea
+      setIsAbiInvalid(false); // If parsing succeeds, the ABI is valid
     } catch (error) {
-      setIsAbiInvalid(true);
+      setIsAbiInvalid(true); // If parsing fails, the ABI is invalid
     }
   };
 
