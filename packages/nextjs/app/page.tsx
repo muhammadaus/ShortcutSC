@@ -30,10 +30,6 @@ interface Contracts {
   };
 }
 
-interface ViemChains {
-  [key: string]: any;
-}
-
 const Home: NextPage = () => {
   // const { address: connectedAddress } = useAccount(); // From base code
   const [address, setAddress] = useState('');
@@ -72,7 +68,7 @@ const Home: NextPage = () => {
       return;
     }
   
-    if (!viemChains[network]) {
+    if (!(viemChains as any)[network]) {
       console.error('Network not found in viemChains:', network);
       return;
     }
