@@ -54,11 +54,12 @@ const Home: NextPage = () => {
     const networkValue = selectedNetwork ? selectedNetwork.value : '';
     setNetwork(networkValue);
     if (selectedNetwork) {
-      updateTargetNetworks(selectedNetwork.value); // Ensure we're passing a string, not null
+      // Using type assertion
+      updateTargetNetworks(selectedNetwork.value as "acala" | "ancient8" | "ancient8Sepolia" | "anvil" | "apexTestnet" | "arbitrum" | "arbitrumGoerli" | "arbitrumNova" | "astar" | "astarZkEVM" | "astarZkyoto" | "arbitrumSepolia" | "zoraTestnet");
     } else {
-      // Handle the case where selectedNetwork is null, e.g., by not calling updateTargetNetworks or calling it with a default value
+      // Handle the case where selectedNetwork is null
     }
-  };
+};
 
 
   const handleReadWrite = async () => {
