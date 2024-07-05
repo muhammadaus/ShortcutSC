@@ -30,6 +30,10 @@ interface Contracts {
   };
 }
 
+interface ViemChains {
+  [key: string]: any;
+}
+
 const Home: NextPage = () => {
   // const { address: connectedAddress } = useAccount(); // From base code
   const [address, setAddress] = useState('');
