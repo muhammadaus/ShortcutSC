@@ -128,7 +128,7 @@ const Home: NextPage = () => {
   
     // Check if contracts is not null and update it
     let updatedContracts;
-    if (importedContracts()) {
+    if (importedContracts(contracts, contracts)) {
       setContracts(contractUpdate);
     } else {
       console.error('Contracts variable is null');
