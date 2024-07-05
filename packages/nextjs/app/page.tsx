@@ -76,7 +76,11 @@ const Home: NextPage = () => {
     type ABIElement = any;
     let abi: ABIElement[];
     try {
-      const abiJson = document.getElementById('contractABI')!.value;
+      const element = document.getElementById('contractABI');
+      if (!(element instanceof HTMLInputElement)) {
+        throw new Error('Element is not an HTMLInputElement');
+      }
+      const abiJson = element.value;
       abi = JSON.parse(abiJson);
     } catch (error) {
       console.error('Invalid ABI:', error);
