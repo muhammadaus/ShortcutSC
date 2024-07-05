@@ -53,8 +53,12 @@ const Home: NextPage = () => {
   const handleNetworkChange = (selectedNetwork: SingleValue<ChainOption>) => {
     const networkValue = selectedNetwork ? selectedNetwork.value : '';
     setNetwork(networkValue);
-    updateTargetNetworks(selectedNetwork);
-  };
+    if (selectedNetwork) {
+      updateTargetNetworks(selectedNetwork.value); // Ensure we're passing a string, not null
+    } else {
+      // Handle the case where selectedNetwork is null, e.g., by not calling updateTargetNetworks or calling it with a default value
+    }
+  };ß
 
 
   const handleReadWrite = async () => {
