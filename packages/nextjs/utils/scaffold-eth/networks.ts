@@ -135,4 +135,3 @@ export function getTargetNetworks(): ChainWithAttributes[] {
   }));
 }
 
-console.log(getTargetNetworks());

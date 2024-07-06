@@ -15,7 +15,6 @@ export function useTargetNetwork(): { targetNetwork: ChainWithAttributes } {
   const setTargetNetwork = useGlobalState(({ setTargetNetwork }) => setTargetNetwork);
 
   useEffect(() => {
-    console.log("Current targetNetwork:", targetNetwork); // Log targetNetwork when the function is called
     // Directly set the new network without matching with the wallet chain ID
     if (scaffoldConfig.targetNetworks[0] && scaffoldConfig.targetNetworks[0].id !== targetNetwork.id) {
       setTargetNetwork(scaffoldConfig.targetNetworks[0]); // Assuming you want to set the first network from scaffoldConfig.targetNetworks

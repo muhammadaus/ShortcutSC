@@ -2,43 +2,31 @@
 
 import Link from "next/link";
 import type { NextPage } from "next";
-// import { useAccount } from "wagmi"; // From base code
+import { useAccount } from "wagmi";
 import { PencilIcon } from "@heroicons/react/24/outline";
-import Select, { SingleValue } from 'react-select';
-import React, { useState, ChangeEvent } from 'react';
-import * as viemChains from 'viem/chains';
+import { Address } from "~~/components/scaffold-eth";
+import Select from 'react-select';
+import { useState } from 'react';
 
-import { GenericContractsDeclaration, setContracts, deepMergeContracts as importedContracts } from '~~/utils/scaffold-eth/contract';
-// import { setContracts } from '~~/utils/scaffold-eth/contract';
-// import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
+import * as chains from "viem/chains";
+import { Chain, defineChain } from 'viem'
 
-import { updateTargetNetworks } from '~~/scaffold.config';
+import React from 'react';
 
-interface ChainOption {
-  value: string;
-  label: string;
-}
+import { deepMergeContracts as importedContracts } from '~~/utils/scaffold-eth/contract';
+import { setContracts } from '~~/utils/scaffold-eth/contract';
+import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { ContractUI } from "~~/app/readwrite/_components/contract/ContractUI";
 
-interface ContractInfo {
-  address: string;
-  abi: any[]; // Ideally, define a more specific type for ABI
-  inheritedFunctions: Record<string, unknown>;
-}
+import { updateContracts } from "~~/contracts/deployedContracts";
 
-interface DeployedContracts {
-  [networkId: number]: {
-    [contractName: string]: ContractInfo;
-  };
-}
+import scaffoldConfig, { updateTargetNetworks } from '~~/scaffold.config';
 
-interface Contracts {
-  [key: string]: {
-    [contractName: string]: ContractInfo;
-  };
-}
+
+const viemChains = require('viem/chains');
 
 const Home: NextPage = () => {
-  // const { address: connectedAddress } = useAccount(); // From base code
+  const { address: connectedAddress } = useAccount();
   const [address, setAddress] = useState('');
   const [isAddressEmpty, setIsAddressEmpty] = useState(true);
   const [isAddressTooShort, setIsAddressTooShort] = useState(false);
@@ -46,26 +34,24 @@ const Home: NextPage = () => {
   const [network, setNetwork] = useState('mainnet');
   const [isContractLoaded, setIsContractLoaded] = useState(false);
 
-  const options: ChainOption[] = Object.keys(viemChains).map(chain => ({ value: chain, label: chain }));
 
-  const handleAbiChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const options = Object.keys(viemChains).map(chain => ({ value: chain, label: chain }));
+
+  const handleAbiChange = (e) => {
+    const abi = e.target.value;
     try {
-      const abi: any[] = JSON.parse(e.target.value); // Correctly parses the JSON string from the textarea
-      setIsAbiInvalid(false); // If parsing succeeds, the ABI is valid
+      JSON.parse(abi);
+      setIsAbiInvalid(false);
     } catch (error) {
-      setIsAbiInvalid(true); // If parsing fails, the ABI is invalid
+      setIsAbiInvalid(true);
     }
   };
 
-  const handleNetworkChange = (selectedNetwork: SingleValue<ChainOption>) => {
-    const networkValue = selectedNetwork ? selectedNetwork.value : '';
-    setNetwork(networkValue);
-    if (selectedNetwork) {
-      // Updated to remove type assertion and use a string type directly
-      updateTargetNetworks(selectedNetwork.value);
-    } else {
-      // Handle the case where selectedNetwork is null
-    }
+  const handleNetworkChange = (selectedNetwork) => {
+    console.log(`Changing network to: ${selectedNetwork}`); // Debug log
+    setNetwork(selectedNetwork);
+    updateTargetNetworks(selectedNetwork);
+    console.log(scaffoldConfig);
   };
 
 
@@ -75,17 +61,11 @@ const Home: NextPage = () => {
       return;
     }
   
-    if (!(viemChains as any)[network]) {
+    if (!viemChains[network]) {
       console.error('Network not found in viemChains:', network);
       return;
     }
   
-    const element = document.getElementById('contractABI');
-    if (!element) {
-      alert('Element with ID contractABI not found');
-      return; // Exit the function if the element is not found
-    }
-
     let abi;
     try {
       const abiJson = document.getElementById('contractABI').value;
@@ -170,13 +150,7 @@ const Home: NextPage = () => {
           id="networkSelector"
           defaultValue={options.find(option => option.value === 'mainnet')}
           options={options}
-          onChange={(selectedOption) => {
-            if (selectedOption) { // Check if selectedOption is not null
-              handleNetworkChange(selectedOption); // Pass the entire selectedOption object
-            } else {
-              // Handle the case when selectedOption is null, if necessary
-            }
-          }}
+          onChange={selectedOption => handleNetworkChange(selectedOption.value)}
           styles={{
             control: (base) => ({
               ...base,
@@ -201,19 +175,19 @@ const Home: NextPage = () => {
 
         {/* Smart Contract Address Input */}
         <input 
-        type="text" 
-        placeholder=" Enter Smart Contract Address" 
-        maxLength={42} 
-        minLength={42} 
-        style={{ width: '400px', borderRadius: '1.5rem' }}
-        value={address} 
-        onChange={e => {
-          const address = e.target.value;
-          setAddress(address);
-          setIsAddressEmpty(!address);
-          setIsAddressTooShort(address.length < 42);
-        }} 
-      />
+          type="text" 
+          placeholder=" Enter Smart Contract Address" 
+          maxLength="42" 
+          minLength="42" 
+          style={{ width: '400px', borderRadius: '1.5rem' }}
+          value={address} 
+          onChange={e => {
+            const address = e.target.value;
+            setAddress(address);
+            setIsAddressEmpty(!address);
+            setIsAddressTooShort(address.length < 42);
+          }} 
+        />
 
         {/* Contract ABI Input */}
         <textarea 

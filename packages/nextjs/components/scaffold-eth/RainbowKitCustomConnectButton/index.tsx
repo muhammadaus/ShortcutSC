@@ -20,8 +20,6 @@ export const RainbowKitCustomConnectButton = () => {
   const { targetNetwork } = useTargetNetwork();
 
   useEffect(() => {
-    // Actions to perform when targetNetwork changes
-    console.log("Target network changed to:", targetNetwork);
   }, [targetNetwork]);
 
   return (
