@@ -11,12 +11,6 @@ import { useGlobalState } from "~~/services/store/store";
  * Site footer
  */
 
-const PlayIcon = ({ className = "" }) => (
-  <svg className={className} viewBox="0 0 20 20" fill="currentColor">
-    <path d="M4.018 14L14.41 9.9a1 1 0 0 0 0-1.8L4.018 4" />
-  </svg>
-);
-
 export const Footer = () => {
 
   const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrency.price);

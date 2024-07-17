@@ -109,7 +109,7 @@ export const Header = () => {
           <HeaderMenuLinks />
         </ul>
       </div>
-      <div className="navbar-end flex-grow mr-4 flex items-center">
+      <div className="navbar-end flex-grow mr-4 flex items-center justify-center">
         {/* Video Modal Button */}
         <div>
           <button
@@ -142,10 +142,10 @@ export const Header = () => {
             </div>
           )}
         </div>
-        {/* Existing navbar-end content */}
-        <RainbowKitCustomConnectButton />
-        <FaucetButton />
       </div>
+      {/* Existing navbar-end content */}
+      <RainbowKitCustomConnectButton />
+        <FaucetButton />
     </div>
   );
 };
