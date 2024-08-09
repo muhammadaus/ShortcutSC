@@ -117,7 +117,7 @@ export const Header = () => {
             onClick={() => setIsVideoModalOpen(true)}
           >
             <PlayIcon className="h-4 w-4" />
-            <span>Watch Tutorial Video *Walkthrough starts at 1:25*</span>
+            <span>Watch Tutorial Video with testnet contracts</span>
           </button>
   
           {isVideoModalOpen && (
@@ -131,7 +131,7 @@ export const Header = () => {
                 <div className="aspect-w-16 aspect-h-9">
                   <iframe
                     className="w-full h-full"
-                    src="https://www.youtube.com/embed/Tf3sNOOTz_o?autoplay=1"
+                    src="https://www.youtube.com/embed/rxeLJsmHBlc?autoplay=1"
                     title="YouTube video player"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
