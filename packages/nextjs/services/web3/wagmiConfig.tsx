@@ -25,7 +25,7 @@ const allChainsFormatted = Object.values(chains).map(chain => ({
       default: {
           name: chain.blockExplorers.default.name,
           url: chain.blockExplorers.default.url,
-          apiUrl: chain.blockExplorers.default.apiUrl,
+          apiUrl: (chain.blockExplorers.default as { apiUrl: string }).apiUrl,
       },
   } : undefined,
   contracts: chain.contracts ? Object.keys(chain.contracts).reduce((acc, key) => {
@@ -34,7 +34,7 @@ const allChainsFormatted = Object.values(chains).map(chain => ({
           blockCreated: chain.contracts[key].blockCreated,
       };
       return acc;
-  }, {}) : undefined,
+  }, {} as Record<string, { address: string; blockCreated: number }>) : undefined,
   testnet: chain.testnet,
 }));
 
@@ -49,6 +49,7 @@ export const wagmiConfig = createConfig({
   connectors: wagmiConnectors,
   ssr: true,
   client({ chain }) {
+    console.log(scaffoldConfig.pollingInterval)
     return createClient({
       chain,
       transport: http(getAlchemyHttpUrl(chain.id)),
