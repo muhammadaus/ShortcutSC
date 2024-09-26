@@ -43,16 +43,18 @@ export const enabledChains = targetNetworks.find((network: Chain) => network.id 
   ? targetNetworks
   : ([...targetNetworks, mainnet] as const);
 
-
 export const wagmiConfig = createConfig({
   chains: allChainsFormatted,
   connectors: wagmiConnectors,
   ssr: true,
   client({ chain }) {
-    console.log(scaffoldConfig.pollingInterval)
+    console.log(scaffoldConfig.pollingInterval);
     return createClient({
       chain,
-      transport: http(getAlchemyHttpUrl(chain.id)),
+      transport: http(
+        getAlchemyHttpUrl(chain.id) || 
+        chain.rpcUrls.default.http[0]
+      ),
       ...(chain.id !== (hardhat as Chain).id
         ? {
             pollingInterval: scaffoldConfig.pollingInterval,
