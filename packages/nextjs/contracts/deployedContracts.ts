@@ -17,7 +17,7 @@ interface ContractInfo {
 // Assuming InheritedFunctions should be a Record<string, string>, define it accordingly
 type InheritedFunctions = Record<string, string>;
 
-let deployedContracts: DeployedContracts = {
+const deployedContracts: DeployedContracts = {
   1: {
     YourContract: {
       address: "0x0000000000000000000000000000000000000000",

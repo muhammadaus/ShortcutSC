@@ -12,32 +12,29 @@ type ChainAttributes = {
 export type ChainWithAttributes = chains.Chain & Partial<ChainAttributes>;
 
 // Mapping of chainId to RPC chain name an format followed by alchemy and infura
-export const RPC_CHAIN_NAMES: Record<number, string> = {
-  [chains.mainnet.id]: "eth-mainnet",
-  [chains.goerli.id]: "eth-goerli",
-  [chains.sepolia.id]: "eth-sepolia",
-  [chains.optimism.id]: "opt-mainnet",
-  [chains.optimismGoerli.id]: "opt-goerli",
-  [chains.optimismSepolia.id]: "opt-sepolia",
-  [chains.arbitrum.id]: "arb-mainnet",
-  [chains.arbitrumGoerli.id]: "arb-goerli",
-  [chains.arbitrumSepolia.id]: "arb-sepolia",
-  [chains.polygon.id]: "polygon-mainnet",
-  [chains.polygonMumbai.id]: "polygon-mumbai",
-  [chains.polygonAmoy.id]: "polygon-amoy",
-  [chains.astar.id]: "astar-mainnet",
-  [chains.polygonZkEvm.id]: "polygonzkevm-mainnet",
-  [chains.polygonZkEvmTestnet.id]: "polygonzkevm-testnet",
-  [chains.base.id]: "base-mainnet",
-  [chains.baseGoerli.id]: "base-goerli",
-  [chains.baseSepolia.id]: "base-sepolia",
-  [chains.scroll.id]: "scroll-mainnet",
-  [chains.scrollSepolia.id]: "scroll-sepolia"
-};
+export const RPC_CHAIN_NAMES: Record<number, string> = Object.fromEntries(
+  Object.entries(chains).map(([key, chain]) => {
+    return [chain.id, chain.name];
+  })
+);
+
 
 export const getAlchemyHttpUrl = (chainId: number) => {
+  const chainNames = Object.keys(chains);
+
+  const targetChainArr = chainNames.filter(chainName => {
+    const wagmiChain = chains[chainName as keyof typeof chains];
+    return wagmiChain.id === chainId;
+  });
+
+  if (targetChainArr.length === 0) {
+    return "";
+  }
+
+  const targetChain = targetChainArr[0] as keyof typeof chains;
+
   return RPC_CHAIN_NAMES[chainId]
-    ? `https://${RPC_CHAIN_NAMES[chainId]}.g.alchemy.com/v2/${scaffoldConfig.alchemyApiKey}`
+    ? chains[targetChain]?.rpcUrls?.default?.http
     : undefined;
 };
 
@@ -101,6 +98,7 @@ export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
   }
 
   const targetChain = targetChainArr[0] as keyof typeof chains;
+
   const blockExplorerTxURL = chains[targetChain]?.blockExplorers?.default?.url;
 
   if (!blockExplorerTxURL) {
