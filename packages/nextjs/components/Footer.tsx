@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { hardhat } from "viem/chains";
 import { CurrencyDollarIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { SwitchTheme } from "~~/components/SwitchTheme";
 import { Faucet } from "~~/components/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useGlobalState } from "~~/services/store/store";
@@ -24,8 +23,8 @@ export const Footer = () => {
           <div className="flex flex-col md:flex-row gap-2 pointer-events-auto">
             {nativeCurrencyPrice > 0 && (
               <div>
-                <div className="btn btn-primary btn-sm font-normal gap-1 cursor-auto">
-                  <CurrencyDollarIcon className="h-4 w-4" />
+                <div className="px-4 py-2 rounded-xl bg-gray-800/50 backdrop-blur-sm border border-gray-700 
+                  text-gray-100 font-normal gap-1 cursor-auto transition-all duration-200">
                   <span>{nativeCurrencyPrice.toFixed(2)}</span>
                 </div>
               </div>
@@ -34,14 +33,19 @@ export const Footer = () => {
             {isLocalNetwork && (
               <>
                 <Faucet />
-                <Link href="/blockexplorer" passHref className="btn btn-primary btn-sm font-normal gap-1">
-                  <MagnifyingGlassIcon className="h-4 w-4" />
+                <Link 
+                  href="/blockexplorer" 
+                  passHref 
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 
+                    hover:from-blue-600 hover:to-purple-600 text-white font-normal gap-1 
+                    transition-all duration-200 pointer-events-auto"
+                >
+                  <MagnifyingGlassIcon className="h-4 w-4 inline-block mr-1" />
                   <span>Block Explorer</span>
                 </Link>
               </>
             )}
           </div>
-          <SwitchTheme className={`pointer-events-auto ${isLocalNetwork ? "self-end md:self-auto" : ""}`} />
         </div>
       </div>
     </div>
