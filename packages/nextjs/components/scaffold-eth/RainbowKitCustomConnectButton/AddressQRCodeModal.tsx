@@ -5,29 +5,26 @@ import { Address } from "~~/components/scaffold-eth";
 type AddressQRCodeModalProps = {
   address: AddressType;
   modalId: string;
+  className?: string;
 };
 
-export const AddressQRCodeModal = ({ address, modalId }: AddressQRCodeModalProps) => {
+export const AddressQRCodeModal = ({ address, modalId, className = "" }: AddressQRCodeModalProps) => {
   return (
-    <>
-      <div>
-        <input type="checkbox" id={`${modalId}`} className="modal-toggle" />
-        <label htmlFor={`${modalId}`} className="modal cursor-pointer">
-          <label className="modal-box relative">
-            {/* dummy input to capture event onclick on modal box */}
-            <input className="h-0 w-0 absolute top-0 left-0" />
-            <label htmlFor={`${modalId}`} className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3">
-              ✕
-            </label>
-            <div className="space-y-3 py-6">
-              <div className="flex flex-col items-center gap-6">
-                <QRCodeSVG value={address} size={256} />
-                <Address address={address} format="long" disableAddressLink />
-              </div>
-            </div>
-          </label>
-        </label>
+    <dialog id={modalId} className="modal">
+      <div className={`modal-box bg-gray-900/50 backdrop-blur-sm border border-gray-800 
+        rounded-xl shadow-xl p-6 ${className}`}>
+        <div className="flex flex-col items-center gap-4">
+          <QRCodeSVG value={address} size={256} />
+          <Address address={address} format="long" />
+        </div>
+        <form method="dialog">
+          <button className="btn btn-circle btn-ghost absolute right-2 top-2 
+            text-gray-400 hover:text-gray-300 hover:bg-gray-800">✕</button>
+        </form>
       </div>
-    </>
+      <form method="dialog" className="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
   );
 };

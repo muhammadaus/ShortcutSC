@@ -3,7 +3,7 @@ import * as chains from "viem/chains";
 import { contracts } from "~~/utils/scaffold-eth/contract";
 
 export type ScaffoldConfig = {
-  targetNetworks: readonly chains.Chain[];
+  targetNetworks: Chain[];
   pollingInterval: number;
   alchemyApiKey: string;
   walletConnectProjectId: string;
@@ -28,7 +28,7 @@ export type ScaffoldConfig = {
 //   console.log(`Chain with ID ${chainIdToFind} not found.`);
 // }
 
-const scaffoldConfig = {
+const scaffoldConfig: ScaffoldConfig = {
   // The networks on which your DApp is live
   targetNetworks: [chains.mainnet],
 
@@ -50,7 +50,7 @@ const scaffoldConfig = {
 
   // Only show the Burner Wallet when running on hardhat network
   onlyLocalBurnerWallet: true,
-} as const satisfies ScaffoldConfig;
+};
 
 export function updateTargetNetworks(selectedNetwork: keyof typeof chains) {
   // Check if the selected network exists in the chains object

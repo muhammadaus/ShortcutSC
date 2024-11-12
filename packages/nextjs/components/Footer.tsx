@@ -21,15 +21,6 @@ export const Footer = () => {
       <div>
         <div className="fixed flex justify-between items-center w-full z-10 p-4 bottom-0 left-0 pointer-events-none">
           <div className="flex flex-col md:flex-row gap-2 pointer-events-auto">
-            {nativeCurrencyPrice > 0 && (
-              <div>
-                <div className="px-4 py-2 rounded-xl bg-gray-800/50 backdrop-blur-sm border border-gray-700 
-                  text-gray-100 font-normal gap-1 cursor-auto transition-all duration-200">
-                  <span>{nativeCurrencyPrice.toFixed(2)}</span>
-                </div>
-              </div>
-            )}
-
             {isLocalNetwork && (
               <>
                 <Faucet />
